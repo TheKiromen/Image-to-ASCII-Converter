@@ -15,10 +15,15 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
+	
+	//------------------COMPONENTS----------------//
+	private Font myFont;
+	private JButton fileSelect,convert;
+	private JLabel chooseFile;
 
 	public MainFrame(String s){
 		super(s);
-		setSize(400,250);
+		setSize(400,350);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -28,6 +33,7 @@ public class MainFrame extends JFrame {
 		GridBagLayout gb = new GridBagLayout();
 		setContentPane(new JPanel(gb));
 		GridBagConstraints gc = new GridBagConstraints();
+		myFont = new Font("TimesRoman", Font.BOLD, 30);
 		
 		gc.weightx=1;
 		gc.weighty=1;
@@ -37,26 +43,40 @@ public class MainFrame extends JFrame {
 		
 		gc.gridx=0;
 		gc.gridy=0;
-		JLabel chooseFile = new JLabel("Choose file:");
-		chooseFile.setFont(new Font("TimesRoman", Font.BOLD, 30));
+		chooseFile = new JLabel("Choose file:");
+		chooseFile.setFont(myFont);
 		add(chooseFile, gc);
 		
 		gc.gridy=1;
-		gc.insets=new Insets(10,20,30,20);
-		JButton fileSelect = new JButton("Open");
-		fileSelect.setFont(new Font("TimesRoman", Font.BOLD, 30));
+		fileSelect = new JButton("Open");
+		fileSelect.setFont(myFont);
 		fileSelect.setPreferredSize(new Dimension(150,80));
 		fileSelect.addActionListener(new FileChooser());
 		add(fileSelect,gc);
-	}
+		
+		gc.gridy=2;
+		gc.insets=new Insets(10,20,30,20);
+		convert = new JButton("Convert");
+		convert.setFont(myFont);
+		convert.setPreferredSize(new Dimension(150,80));
+		convert.setEnabled(false);
+		convert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		add(convert,gc);
+		
+		}
 	
 	
 	//--------------------CHOOSING FILE-------------------------//
 	
 	private class FileChooser implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Hello World!");
+			convert.setEnabled(true);
 		}
-		
 	}
+	
+	
 }
