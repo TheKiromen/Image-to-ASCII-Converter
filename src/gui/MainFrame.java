@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -7,11 +8,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -20,6 +24,10 @@ public class MainFrame extends JFrame {
 	private Font myFont;
 	private JButton fileSelect,convert;
 	private JLabel chooseFile;
+	private File image;
+	private JFileChooser chooser;
+	private FileNameExtensionFilter filter;
+	private int returnVal;
 
 	public MainFrame(String s){
 		super(s);
@@ -70,11 +78,33 @@ public class MainFrame extends JFrame {
 		}
 	
 	
+	//Additional validation if user baypasses the extension filter
+	private boolean fileValidation(File img) {
+		return false;
+	}
+	
+
 	//--------------------CHOOSING FILE-------------------------//
 	
 	private class FileChooser implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			convert.setEnabled(true);
+			chooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
+			filter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "png");
+			chooser.setFileFilter(filter);
+			returnVal = chooser.showOpenDialog(null);
+			if(returnVal==0) {
+				image = chooser.getSelectedFile();
+				if(fileValidation(image)) {
+					convert.setEnabled(true);
+					chooseFile.setText("File chosen");
+					chooseFile.setForeground(Color.GREEN);
+					//--TODO--//
+					//Conversion
+				}else {
+					chooseFile.setText("Wrong file");
+					chooseFile.setForeground(Color.RED);
+				}
+			}
 		}
 	}
 	
