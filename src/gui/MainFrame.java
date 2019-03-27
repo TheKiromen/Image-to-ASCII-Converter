@@ -8,14 +8,21 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import data.Converter;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -24,10 +31,21 @@ public class MainFrame extends JFrame {
 	private Font myFont;
 	private JButton fileSelect,convert;
 	private JLabel chooseFile;
-	private File image;
+	private File file;
+	private BufferedImage img;
 	private JFileChooser chooser;
 	private FileNameExtensionFilter filter;
 	private int returnVal;
+	
+	//--------------FILE VALIDATION-------------//
+	private Pattern pattern;
+	private Matcher matcher;
+	
+	
+	//---------------CONVERTING------------------//
+	Converter conv;
+	
+	
 
 	public MainFrame(String s){
 		super(s);
@@ -70,7 +88,7 @@ public class MainFrame extends JFrame {
 		convert.setEnabled(false);
 		convert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				conv.convert(img);
 			}
 		});
 		add(convert,gc);
@@ -80,9 +98,15 @@ public class MainFrame extends JFrame {
 	
 	//Additional validation if user baypasses the extension filter
 	private boolean fileValidation(File img) {
-		return false;
+		pattern=Pattern.compile("(\\.png$)|(\\.jpg$)");
+		matcher=pattern.matcher(img.getPath());
+		return matcher.find();
 	}
 	
+	
+	public void setConverter(Converter c) {
+		this.conv=c;
+	}
 
 	//--------------------CHOOSING FILE-------------------------//
 	
@@ -93,14 +117,20 @@ public class MainFrame extends JFrame {
 			chooser.setFileFilter(filter);
 			returnVal = chooser.showOpenDialog(null);
 			if(returnVal==0) {
-				image = chooser.getSelectedFile();
-				if(fileValidation(image)) {
-					convert.setEnabled(true);
-					chooseFile.setText("File chosen");
-					chooseFile.setForeground(Color.GREEN);
-					//--TODO--//
-					//Conversion
+				file = chooser.getSelectedFile();
+				if(fileValidation(file)) {
+					try {
+						img=ImageIO.read(file);
+						convert.setEnabled(true);
+						chooseFile.setText("File chosen");
+						chooseFile.setForeground(Color.GREEN);
+					} catch (IOException e1) {
+						convert.setEnabled(false);
+						chooseFile.setText("Failed to convert");
+						chooseFile.setForeground(Color.RED);
+					}
 				}else {
+					convert.setEnabled(false);
 					chooseFile.setText("Wrong file");
 					chooseFile.setForeground(Color.RED);
 				}
