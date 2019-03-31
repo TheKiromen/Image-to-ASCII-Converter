@@ -111,6 +111,8 @@ public class MainFrame extends JFrame {
 	//--------------------CHOOSING FILE-------------------------//
 	
 	private class FileChooser implements ActionListener{
+		ImageFrame img_frame;
+		
 		public void actionPerformed(ActionEvent e) {
 			chooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
 			filter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "png");
@@ -124,6 +126,12 @@ public class MainFrame extends JFrame {
 						convert.setEnabled(true);
 						chooseFile.setText("File chosen");
 						chooseFile.setForeground(Color.GREEN);
+						if(img_frame!=null) {
+							img_frame.dispose();
+						}
+						img_frame=new ImageFrame(img);
+						img_frame.setVisible(true);
+						
 					} catch (IOException e1) {
 						convert.setEnabled(false);
 						chooseFile.setText("Failed to convert");
