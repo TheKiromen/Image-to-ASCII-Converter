@@ -17,12 +17,26 @@ public class Converter {
 				pixels.get(i).add(new Color(img.getRGB(j, i)));
 			}
 		}
-
+		
+		
+		toGrayScale(pixels);
+		
 		result=null;
 		return result;
 	}
+
 	
-	//ToGrayScale (returns array of calculated pixels)
+	
+	private void toGrayScale(ArrayList<ArrayList<Color>> pixels) {
+		int avg;
+		
+		for(ArrayList<Color> row : pixels) {
+			for(Color pixel : row) {
+				avg=(pixel.getRed()+pixel.getBlue()+pixel.getGreen())/3;
+				pixel=new Color(avg,avg,avg);
+			}
+		}
+	}
 	
 	
 	//PixelToAscii (given int retuns string witch char/whitespaces)

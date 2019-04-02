@@ -18,8 +18,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import data.Converter;
@@ -30,12 +31,13 @@ public class MainFrame extends JFrame {
 	//------------------COMPONENTS----------------//
 	private Font myFont;
 	private JButton fileSelect,convert;
-	private JLabel chooseFile;
 	private File file;
 	private BufferedImage img;
 	private JFileChooser chooser;
 	private FileNameExtensionFilter filter;
 	private int returnVal;
+	private JTextArea chooseFile;
+
 	
 	//--------------FILE VALIDATION-------------//
 	private Pattern pattern;
@@ -52,7 +54,7 @@ public class MainFrame extends JFrame {
 		setSize(400,350);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		
 		//------------------------LAYOUT---------------------//
 		
@@ -69,9 +71,13 @@ public class MainFrame extends JFrame {
 		
 		gc.gridx=0;
 		gc.gridy=0;
-		chooseFile = new JLabel("Choose file:");
+		chooseFile=new JTextArea("Choose file:");
 		chooseFile.setFont(myFont);
-		add(chooseFile, gc);
+		chooseFile.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
+		chooseFile.setBackground(UIManager.getColor("JFrame.background"));
+		chooseFile.setEditable(false);
+		chooseFile.setFocusable(false);
+		add(chooseFile,gc);
 		
 		gc.gridy=1;
 		fileSelect = new JButton("Open");
@@ -86,12 +92,32 @@ public class MainFrame extends JFrame {
 		convert.setFont(myFont);
 		convert.setPreferredSize(new Dimension(150,80));
 		convert.setEnabled(false);
+		
+		
+		
+		//-----------------CONVERSION-------------------//
 		convert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				chooseFile.setForeground(Color.BLACK);
+				chooseFile.setText("Converting...");
+				
+				
+				//Honestly I dont know why but without this line it just cut out part of text
+				chooseFile.setSize(chooseFile.getPreferredSize());
+				//And without this line it doesnt even refresh TextArea
+				chooseFile.paintImmediately(chooseFile.getVisibleRect());
+
+				
+				getObjectInstance().setEnabled(false);
 				conv.convert(img);
+				getObjectInstance().setEnabled(true);
+				chooseFile.setText("Conversion succesfull!");
+				chooseFile.setForeground(Color.GREEN);
 			}
 		});
 		add(convert,gc);
+		//----------------------------------------------//
+		
 		
 		}
 	
@@ -106,6 +132,10 @@ public class MainFrame extends JFrame {
 	
 	public void setConverter(Converter c) {
 		this.conv=c;
+	}
+	
+	private MainFrame getObjectInstance() {
+		return this;
 	}
 
 	//--------------------CHOOSING FILE-------------------------//
@@ -131,6 +161,7 @@ public class MainFrame extends JFrame {
 						}
 						img_frame=new ImageFrame(img);
 						img_frame.setVisible(true);
+						getObjectInstance().toFront();
 						
 					} catch (IOException e1) {
 						convert.setEnabled(false);
