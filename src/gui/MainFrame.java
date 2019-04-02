@@ -37,6 +37,8 @@ public class MainFrame extends JFrame {
 	private FileNameExtensionFilter filter;
 	private int returnVal;
 	private JTextArea chooseFile;
+	//Flag for fixing repainting bug
+	private Boolean flag=false;
 
 	
 	//--------------FILE VALIDATION-------------//
@@ -99,12 +101,23 @@ public class MainFrame extends JFrame {
 		convert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				chooseFile.setForeground(Color.BLACK);
-				chooseFile.setText("Converting...");
+				
+				//After first conversion text doesnt repaint fully and lefts some old text in backgroud
+				//Stupid solustion but "smart" ones aren't working so I'll leave it at that.
+				//If you have any ideas how to make it more elegant and working feel free to contribute.
+				if(flag) {
+					chooseFile.setText("          Converting...          ");
+				}else {
+					flag=true;
+					chooseFile.setText("Converting...");
+				}
 				
 				
-				//Honestly I dont know why but without this line it just cut out part of text
+				//Makes TextArea more responsive 
 				chooseFile.setSize(chooseFile.getPreferredSize());
-				//And without this line it doesnt even refresh TextArea
+				
+				
+				//Without this line TextArea doesnt repaint until end of the method
 				chooseFile.paintImmediately(chooseFile.getVisibleRect());
 
 				
