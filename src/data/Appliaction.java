@@ -1,7 +1,5 @@
 package data;
 
-import java.io.File;
-
 import gui.MainFrame;
 
 public class Appliaction {
