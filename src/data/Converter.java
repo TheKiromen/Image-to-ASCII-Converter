@@ -6,9 +6,17 @@ import java.util.ArrayList;
 
 public class Converter {
 	
-	public String[] convert(BufferedImage img) {
-		String[] result;
+	//2 chars at once to compensate char height issues
+	private String[] chars= {"@@","##","&&","%%","$$","88","==","oo","**","++","~~","^^","--",".."};
+	private double avg;
+	private int fontSize;
+	
+	
+	public ArrayList<String> convert(BufferedImage img) {
+		ArrayList<String> result=new ArrayList<String>();
+		String row;
 		ArrayList<ArrayList<Color>> pixels= new ArrayList<ArrayList<Color>>();
+		fontSize=6;
 		
 		//Go through all pixels in image and put them into array
 		for(int i=0;i<img.getHeight();i++) {
@@ -20,8 +28,32 @@ public class Converter {
 		
 		
 		toGrayScale(pixels);
+
 		
-		result=null;
+		//Font size is 8 so we are taking 8x8 squares into consideration
+		for(int rows=0;rows<pixels.size();rows+=fontSize) {
+			row="";
+			for(int cols=0;cols<pixels.get(rows).size();cols+=fontSize) {
+				avg=0;
+				
+				//Calculating avg brightness of that 16x16 square
+				for(int w=cols;w<cols+fontSize;w++) {
+					for(int h=rows;h<rows+fontSize;h++) {
+						avg+=pixels.get(rows).get(cols).getRed();
+					}
+				}
+				avg/=(fontSize*fontSize);	
+				
+				
+				//Matching avg brightness with corresponding character
+				row+=chars[(int)Math.floor((avg/255)*(chars.length-1))];
+				
+			}
+			
+			result.add(new String(row));
+		}
+		
+		
 		return result;
 	}
 
@@ -37,7 +69,4 @@ public class Converter {
 			}
 		}
 	}
-	
-	
-	//PixelToAscii (given int retuns string witch char/whitespaces)
 }

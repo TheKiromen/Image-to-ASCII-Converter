@@ -20,6 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -37,6 +38,7 @@ public class MainFrame extends JFrame {
 	private FileNameExtensionFilter filter;
 	private int returnVal;
 	private JTextArea chooseFile;
+	private LookAndFeel oldStyle;
 	//Flag for fixing repainting bug
 	private Boolean flag=false;
 
@@ -81,12 +83,14 @@ public class MainFrame extends JFrame {
 		chooseFile.setFocusable(false);
 		add(chooseFile,gc);
 		
+
 		gc.gridy=1;
 		fileSelect = new JButton("Open");
 		fileSelect.setFont(myFont);
 		fileSelect.setPreferredSize(new Dimension(150,80));
 		fileSelect.addActionListener(new FileChooser());
 		add(fileSelect,gc);
+		
 		
 		gc.gridy=2;
 		gc.insets=new Insets(10,20,30,20);
@@ -95,10 +99,25 @@ public class MainFrame extends JFrame {
 		convert.setPreferredSize(new Dimension(150,80));
 		convert.setEnabled(false);
 		
+	
+
+		//----SETTING UP FILE CHOOSER----//
+		oldStyle=UIManager.getLookAndFeel();
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			chooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
+			filter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "png");
+			chooser.setFileFilter(filter);
+			UIManager.setLookAndFeel(oldStyle);
+		} catch (Exception ex) {}
+		
+		
 		
 		
 		//-----------------CONVERSION-------------------//
 		convert.addActionListener(new ActionListener() {
+			AsciiFrame output;
+			
 			public void actionPerformed(ActionEvent arg0) {
 				chooseFile.setForeground(Color.BLACK);
 				
@@ -122,10 +141,22 @@ public class MainFrame extends JFrame {
 
 				
 				getObjectInstance().setEnabled(false);
-				conv.convert(img);
+				
+				
+				if(output!=null) {
+					output.dispose();
+				}
+				output=new AsciiFrame(conv.convert(img));
+				output.setVisible(true);
+				
+				
 				getObjectInstance().setEnabled(true);
+				getObjectInstance().toFront();
+				
+				
 				chooseFile.setText("Conversion succesfull!");
 				chooseFile.setForeground(Color.GREEN);
+				
 			}
 		});
 		add(convert,gc);
@@ -157,9 +188,7 @@ public class MainFrame extends JFrame {
 		ImageFrame img_frame;
 		
 		public void actionPerformed(ActionEvent e) {
-			chooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
-			filter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "png");
-			chooser.setFileFilter(filter);
+
 			returnVal = chooser.showOpenDialog(null);
 			if(returnVal==0) {
 				file = chooser.getSelectedFile();
