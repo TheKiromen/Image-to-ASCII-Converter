@@ -106,7 +106,7 @@ public class MainFrame extends JFrame {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			chooser = new JFileChooser(System.getProperty("user.home")+"/Desktop");
-			filter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "png");
+			filter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "png","bmp","jpeg");
 			chooser.setFileFilter(filter);
 			UIManager.setLookAndFeel(oldStyle);
 		} catch (Exception ex) {}
@@ -168,7 +168,7 @@ public class MainFrame extends JFrame {
 	
 	//Additional validation if user baypasses the extension filter
 	private boolean fileValidation(File img) {
-		pattern=Pattern.compile("(\\.png$)|(\\.jpg$)");
+		pattern=Pattern.compile("(\\.PNG$)|(\\.JPG$)|(\\.BMP$)||(\\.JPEG$)");
 		matcher=pattern.matcher(img.getPath());
 		return matcher.find();
 	}
