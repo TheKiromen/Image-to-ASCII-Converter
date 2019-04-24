@@ -16,8 +16,11 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.LookAndFeel;
@@ -39,8 +42,12 @@ public class MainFrame extends JFrame {
 	private int returnVal;
 	private JTextArea chooseFile;
 	private LookAndFeel oldStyle;
+	private JMenuBar menuBar;
+	private JMenu menu;
+	private JCheckBoxMenuItem imgPrevItem;
 	//Flag for fixing repainting bug
 	private Boolean flag=false;
+	private Boolean showImgPrev=true;
 
 	
 	//--------------FILE VALIDATION-------------//
@@ -66,6 +73,30 @@ public class MainFrame extends JFrame {
 		setContentPane(new JPanel(gb));
 		GridBagConstraints gc = new GridBagConstraints();
 		myFont = new Font("TimesRoman", Font.BOLD, 30);
+		
+		
+		
+		
+		//Menu
+		menuBar = new JMenuBar();
+		menu = new JMenu("Settings");
+		imgPrevItem=new JCheckBoxMenuItem("Image preview");
+		imgPrevItem.setSelected(true);
+		menuBar.add(menu);
+		menu.add(imgPrevItem);
+		setJMenuBar(menuBar);
+		
+		//Setting flag
+		imgPrevItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showImgPrev=imgPrevItem.isSelected();
+			}
+		});
+		
+		
+		
+		
+		//Layout
 		
 		gc.weightx=1;
 		gc.weighty=1;
@@ -201,9 +232,12 @@ public class MainFrame extends JFrame {
 						if(img_frame!=null) {
 							img_frame.dispose();
 						}
-						img_frame=new ImageFrame(img);
-						img_frame.setVisible(true);
-						getObjectInstance().toFront();
+						
+						if(showImgPrev) {
+							img_frame=new ImageFrame(img);
+							img_frame.setVisible(true);
+							getObjectInstance().toFront();
+						}
 						
 					} catch (IOException e1) {
 						convert.setEnabled(false);
