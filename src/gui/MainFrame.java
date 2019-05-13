@@ -33,7 +33,7 @@ import data.Converter;
 public class MainFrame extends JFrame {
 	
 	//------------------COMPONENTS----------------//
-	private Font myFont;
+	private Font myFont,outputFont;
 	private JButton fileSelect,convert;
 	private File file;
 	private BufferedImage img;
@@ -73,7 +73,7 @@ public class MainFrame extends JFrame {
 		setContentPane(new JPanel(gb));
 		GridBagConstraints gc = new GridBagConstraints();
 		myFont = new Font("TimesRoman", Font.BOLD, 30);
-		
+		outputFont = new Font(Font.MONOSPACED,Font.BOLD,6);
 		
 		
 		
@@ -177,7 +177,7 @@ public class MainFrame extends JFrame {
 				if(output!=null) {
 					output.dispose();
 				}
-				output=new AsciiFrame(conv.convert(img));
+				output=new AsciiFrame(conv.convert(img,outputFont),outputFont);
 				output.setVisible(true);
 				
 				

@@ -1,22 +1,22 @@
 package data;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Converter {
 	
-	//2 chars at once to compensate char height issues
-	private String[] chars= {"@@","##","&&","%%","$$","88","==","oo","**","++","~~","^^","--",".."};
+	private String[] chars= {"@","#","&","%","$","8","=","o","*","+","~","^","-","."};
 	private double avg;
 	private int fontSize;
 	
 	
-	public ArrayList<String> convert(BufferedImage img) {
+	public ArrayList<String> convert(BufferedImage img,Font f) {
 		ArrayList<String> result=new ArrayList<String>();
 		String row;
 		ArrayList<ArrayList<Color>> pixels= new ArrayList<ArrayList<Color>>();
-		fontSize=6;
+		fontSize=f.getSize();
 		
 		//Go through all pixels in image and put them into array
 		for(int i=0;i<img.getHeight();i++) {
@@ -30,19 +30,18 @@ public class Converter {
 		toGrayScale(pixels);
 
 		
-		//Font size is 8 so we are taking 8x8 squares into consideration
 		for(int rows=0;rows<pixels.size();rows+=fontSize) {
 			row="";
-			for(int cols=0;cols<pixels.get(rows).size();cols+=fontSize) {
+			for(int cols=0;cols<pixels.get(rows).size();cols+=fontSize/2) {
 				avg=0;
 				
-				//Calculating avg brightness of that 16x16 square
+				//Calculating avg brightness of area given by font size
 				for(int w=cols;w<cols+fontSize;w++) {
-					for(int h=rows;h<rows+fontSize;h++) {
+					for(int h=rows;h<rows+(fontSize/2);h++) {
 						avg+=pixels.get(rows).get(cols).getRed();
 					}
 				}
-				avg/=(fontSize*fontSize);	
+				avg/=(fontSize*(fontSize/2));	
 				
 				
 				//Matching avg brightness with corresponding character

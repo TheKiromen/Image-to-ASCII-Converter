@@ -17,10 +17,11 @@ public class AsciiFrame extends JFrame {
 	private int x,y,width,height;
 	private JScrollPane scroll;
 	private JTextArea output;
+	private Font font;
 	
-	public AsciiFrame(ArrayList<String> text) {
+	public AsciiFrame(ArrayList<String> text,Font f) {
 		super("ASCII");
-		
+		font = f;
 		screenSize=Toolkit.getDefaultToolkit().getScreenSize();
 		
 		//---------------Setting x an width-----------------------//
@@ -48,7 +49,7 @@ public class AsciiFrame extends JFrame {
 		output=new JTextArea();
 		output.setEditable(false);
 		output.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-		output.setFont(new Font(Font.MONOSPACED,Font.BOLD,6));
+		output.setFont(font);
 		for(String row : text) {
 			output.append(row+"\n");
 		}
@@ -59,5 +60,6 @@ public class AsciiFrame extends JFrame {
 		scroll.getHorizontalScrollBar().setUnitIncrement(25);
 		add(scroll);
 	}
+	
 	
 }
