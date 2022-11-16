@@ -1,11 +1,26 @@
+
 # Image-ASCII Converter
-#### Application that converts images into set of ASCII characters that kinda resemble the original.
 
-#### [Executable](ImgToASCII.jar) - Requires Java!
-
-#### For source code go here [src](src)
-
-It's far from perfet but its working! I'm planning on adding some more features later on.
-So far it supports only JPG and PNG files, if you have any suggestions feel free to share them.
+Application for converting images into set of ASCII characters that are menat to resemble it.
 
 
+## Demo
+
+[Executable](ImgToASCII.jar) - Requires Java!
+
+
+## Screenshots
+
+![App Screenshot](Screenshots/app1.png)
+
+
+## Features
+
+- Image to ASCII conversion
+- Image extension validation
+- Results displayed in two separate windows
+
+
+## Authors
+
+- [@dkrucze](https://github.com/TheKiromen)
