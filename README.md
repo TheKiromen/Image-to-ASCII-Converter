@@ -12,6 +12,11 @@ Application for converting images into set of ASCII characters that are menat to
 ## Screenshots
 
 ![App Screenshot](Screenshots/app1.png)
+![App Screenshot](Screenshots/app2.png)
+![App Screenshot](Screenshots/image1.png)
+![App Screenshot](Screenshots/image1result.png)
+![App Screenshot](Screenshots/image2.png)
+![App Screenshot](Screenshots/image2result.png)
 
 
 ## Features
