@@ -26,6 +26,12 @@ Application for converting images into set of ASCII characters that are menat to
 - Results displayed in two separate windows
 
 
+## Technologies
+
+- Java
+- Swing
+
+
 ## Authors
 
 - [@dkrucze](https://github.com/TheKiromen)
